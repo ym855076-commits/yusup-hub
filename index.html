@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yusup Hub - Продуктивность и Утилиты</title>
+    <title>Yusup Hub - Панель управления</title>
     <style>
         :root {
             --bg-color: #f4f6f9;
@@ -11,6 +11,7 @@
             --text-color: #333333;
             --subtext-color: #666666;
             --header-color: #1a1a1a;
+            --border-color: #e0e0e0;
         }
         body.dark-theme {
             --bg-color: #121212;
@@ -18,6 +19,7 @@
             --text-color: #e0e0e0;
             --subtext-color: #aaaaaa;
             --header-color: #ffffff;
+            --border-color: #333333;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -25,7 +27,7 @@
             color: var(--text-color);
             margin: 0;
             padding: 15px;
-            transition: background 0.30s, color 0.30s;
+            transition: background 0.3s, color 0.3s;
         }
         .container {
             max-width: 500px;
@@ -40,6 +42,7 @@
             padding: 15px;
             border-radius: 14px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
         }
         .header h1 {
             margin: 0 0 3px 0;
@@ -56,7 +59,8 @@
             gap: 5px;
         }
         .top-controls button {
-            background: #eee;
+            background: var(--border-color);
+            color: var(--text-color);
             border: none;
             padding: 6px 10px;
             border-radius: 6px;
@@ -86,20 +90,12 @@
             padding: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             margin-bottom: 20px;
-            transition: background 0.30s;
+            border: 1px solid var(--border-color);
         }
-        .btn-main {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            margin-top: 10px;
+        input, textarea {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
         }
     </style>
 </head>
@@ -107,118 +103,83 @@
 
 <div class="container">
 
-    <!-- Шапка с переключателями темы и языка -->
+    <!-- Шапка -->
     <div class="header">
         <div>
-            <h1 id="i18n-welcome">Привет, Юсуп! 👋</h1>
-            <p id="i18n-subtitle">Продуктивность и инструменты.</p>
+            <h1 data-i18n="welcome">Привет, Юсуп! 👋</h1>
+            <p data-i18n="subtitle">Центр управления и продуктивность.</p>
         </div>
         <div class="top-controls">
             <button onclick="toggleTheme()" id="themeBtn">🌙</button>
-            <button onclick="setGlobalLang('ru')" id="btnRu" style="background: #2e7d32; color: white;">RU</button>
+            <button onclick="setGlobalLang('ru')" id="btnRu">RU</button>
             <button onclick="setGlobalLang('tk')" id="btnTk">TK</button>
         </div>
     </div>
 
-    <!-- Имя Всевышнего -->
+    <!-- Бисмилла -->
     <div class="bismillah-card">
         <p class="bismillah-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
     </div>
 
-    <!-- Блок: Майя (Собеседник + Автоответчик) -->
-    <div class="card" style="border-left: 5px solid #d81b60;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h3 id="i18n-maya-title" style="margin: 0; color: #d81b60; font-size: 18px;">👩‍💻 Майя (Собеседник)</h3>
-            <button onclick="toggleAutoResponder()" id="autoBtn" style="background: rgba(216,27,96,0.1); color: #d81b60; border: 1px solid #d81b60; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600;">🤖 Авто-режим: ВЫКЛ</button>
-        </div>
-        <p id="mayaText" style="font-size: 14px; color: var(--text-color); margin-bottom: 10px;">
-            "Salam! Men Maýa. Islegiňize görä türkmen ýa-da rus dilinde gürleşmäge taýýar!"
-        </p>
-        <div style="display: flex; gap: 8px;">
-            <input type="text" id="mayaInput" placeholder="Написать Майе..." style="flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #ccc; font-size: 13px; background: transparent; color: var(--text-color);">
-            <button onclick="talkToMaya()" style="background: #d81b60; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor: pointer;">OK</button>
-        </div>
-        <p id="mayaReply" style="font-size: 13px; color: #d81b60; margin-top: 8px; font-style: italic;"></p>
+    <!-- Блок: Статус смены / Главная задача -->
+    <div class="card" style="border-left: 5px solid #1976d2;">
+        <h3 style="margin: 0 0 5px 0; color: #1976d2; font-size: 18px;" data-i18n="shiftTitle">📌 Главная задача / Смена</h3>
+        <p style="font-size: 13px; color: var(--subtext-color); margin-bottom: 10px;" data-i18n="shiftSub">Фикус на текущий рабочий момент.</p>
+        <input type="text" id="shiftInput" oninput="saveShift()" style="width: 100%; border-radius: 8px; padding: 10px; font-size: 13px; box-sizing: border-box;" placeholder="Например: Утренняя смена / Дописать бота">
     </div>
 
-    <!-- Блок: Тренажер фокуса (Deep Work) -->
+    <!-- Блок: Помодоро / Фокус (Точный таймер) -->
     <div class="card" style="border-left: 5px solid #00796b;">
-        <h3 id="i18n-focus-game-title" style="margin: 0 0 5px 0; color: #00796b; font-size: 18px;">⏱️ Сессия Фокуса (Deep Work)</h3>
-        <p id="i18n-focus-game-sub" style="font-size: 13px; color: var(--subtext-color); margin-bottom: 12px;">Нажми, чтобы начать отсчет времени концентрации.</p>
-        <div style="text-align: center; font-size: 24px; font-weight: bold; color: #00796b; margin-bottom: 10px;" id="focusTimer">00:00</div>
-        <button class="btn-main" id="i18n-focus-btn" style="background: #00796b; color: white; margin-top: 0;" onclick="toggleFocusTimer()">Начать сессию</button>
+        <h3 style="margin: 0 0 5px 0; color: #00796b; font-size: 18px;" data-i18n="focusTitle">⏱️ Сессия Фокуса (Pomodoro)</h3>
+        <p style="font-size: 13px; color: var(--subtext-color); margin-bottom: 12px;" data-i18n="focusSub">Концентрация 25 минут без потери времени.</p>
+        <div style="text-align: center; font-size: 28px; font-weight: bold; color: #00796b; margin-bottom: 10px;" id="focusTimer">25:00</div>
+        <button style="display: block; width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; background: #00796b; color: white;" id="focusBtn" onclick="toggleFocusTimer()">Начать сессию</button>
     </div>
 
-    <!-- Блок: Священный Коран & Тафсир -->
+    <!-- Блок: Коран & Размышления -->
     <div class="card" style="border-left: 5px solid #2e7d32;">
-        <h3 id="i18n-quran-title" style="margin: 0 0 12px 0; color: #2e7d32; font-size: 18px;">📖 Священный Коран & Тафсир</h3>
-
+        <h3 style="margin: 0 0 12px 0; color: #2e7d32; font-size: 18px;" data-i18n="quranTitle">📖 Священный Коран</h3>
         <div style="font-family: 'Traditional Arabic', 'Amiri', serif; font-size: 22px; text-align: right; color: #2e7d32; margin-bottom: 10px; direction: rtl;" id="quranArabic">
             وَمَن يَتَّوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ
         </div>
-
         <p style="font-size: 15px; font-weight: 500; margin-bottom: 15px;" id="quranText">
             «А кто уповает на Аллаха, для того Он достаточен» (Сура «Развод», аят 3).
         </p>
-
-        <div id="aiCommentBox" style="display: none; background: rgba(46, 125, 50, 0.1); padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed #2e7d32;">
-            <p style="margin: 0; font-size: 13px;" id="aiCommentText">
-                🤖 <strong>ИИ комментирует:</strong> Глубокий принцип для обретения внутреннего спокойствия. Истинное упование сочетает в себе активные действия и надежду на Всевышнего.
-            </p>
+        <div id="reflectionBox" style="display: none; background: rgba(46, 125, 50, 0.1); padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed #2e7d32;">
+            <p style="margin: 0; font-size: 13px;" id="reflectionText">💭 <strong>Размышление:</strong> Истинное упование сочетает в себе активные действия и надежду на Всевышнего.</p>
         </div>
-
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button onclick="toggleAiComment()" id="i18n-ai-btn" style="flex: 2; background: #2e7d32; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: 600;">
-                🤖 AI Комментарий
-            </button>
-            <button onclick="nextAyat()" id="i18n-next-btn" style="flex: 1; background: rgba(46, 125, 50, 0.1); color: #2e7d32; border: 1px solid #2e7d32; padding: 10px; border-radius: 8px; font-size: 13px; cursor: pointer;">
-                Следующий 🔄
-            </button>
-        </div>
-
-        <div style="margin-top: 12px; text-align: center;">
-            <a href="https://surah.ru" target="_blank" id="i18n-quran-link" style="font-size: 12px; color: #2e7d32; text-decoration: underline;">Читать весь Коран онлайн (полная библиотека) ↗</a>
+        <div style="display: flex; gap: 8px;">
+            <button onclick="toggleReflection()" style="flex: 2; background: #2e7d32; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: 600;" data-i18n="refBtn">💭 Размышление</button>
+            <button onclick="nextAyat()" style="flex: 1; background: rgba(46, 125, 50, 0.1); color: #2e7d32; border: 1px solid #2e7d32; padding: 10px; border-radius: 8px; font-size: 13px; cursor: pointer;" data-i18n="nextBtn">Далее 🔄</button>
         </div>
     </div>
 
-    <!-- Блок: IT & Жизненный юмор -->
-    <div class="card" style="border-left: 5px solid #ffa000;">
-        <h3 id="i18n-humor-title" style="margin: 0 0 5px 0; color: #ffa000; font-size: 18px;">😂 IT & Жизненный Юмор</h3>
-        <p id="i18n-humor-sub" style="font-size: 13px; color: var(--subtext-color); margin-bottom: 10px;">Шутки для поднятия настроения.</p>
-        <p id="i18n-humor-text" style="font-size: 14px; font-style: italic; margin: 0;">— Почему программисты не любят природу? — Там слишком много багов и нет кнопки Undo.</p>
-    </div>
-
-    <!-- Блок: AI Советник -->
-    <div class="card" style="border-left: 5px solid #7b1fa2;">
-        <h3 id="i18n-advisor-title" style="margin: 0 0 5px 0; color: #7b1fa2; font-size: 18px;">🤖 AI Советник</h3>
-        <p id="i18n-advisor-sub" style="font-size: 13px; color: var(--subtext-color); margin-bottom: 10px;">Новые силы и умные советы на каждый день.</p>
-        <button class="btn-main" id="i18n-advisor-btn" style="background: #7b1fa2; color: white;" onclick="getAiAdvice()">Получить совет</button>
-    </div>
-
-    <!-- Блок: Управление ботами и проектами -->
+    <!-- Блок: Мои Проекты -->
     <div class="card" style="border-left: 5px solid #e65100;">
-        <h3 id="i18n-bots-title" style="margin: 0 0 5px 0; color: #e65100; font-size: 18px;">⚡ Мои Проекты & Боты</h3>
-        <p id="i18n-bots-sub" style="font-size: 13px; color: var(--subtext-color); margin-bottom: 12px;">Быстрый доступ к деплоям и панели управления.</p>
+        <h3 style="margin: 0 0 5px 0; color: #e65100; font-size: 18px;" data-i18n="projectsTitle">⚡ Мои Проекты & Боты</h3>
+        <p style="font-size: 13px; color: var(--subtext-color); margin-bottom: 12px;" data-i18n="projectsSub">Быстрый доступ к разработкам.</p>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <a href="https://railway.app" target="_blank" style="background: rgba(230,81,0,0.1); color: #e65100; padding: 8px 12px; border-radius: 8px; font-size: 12px; text-decoration: none; font-weight: 600;">Railway (Боты)</a>
             <a href="https://app.netlify.com" target="_blank" style="background: rgba(230,81,0,0.1); color: #e65100; padding: 8px 12px; border-radius: 8px; font-size: 12px; text-decoration: none; font-weight: 600;">Netlify Hub</a>
+            <a href="https://railway.app" target="_blank" style="background: rgba(230,81,0,0.1); color: #e65100; padding: 8px 12px; border-radius: 8px; font-size: 12px; text-decoration: none; font-weight: 600;">Railway Bots</a>
+            <a href="https://github.com" target="_blank" style="background: rgba(230,81,0,0.1); color: #e65100; padding: 8px 12px; border-radius: 8px; font-size: 12px; text-decoration: none; font-weight: 600;">GitHub</a>
         </div>
     </div>
 
-    <!-- Блок: Заметки & Идеи (с автосохранением) -->
+    <!-- Блок: Заметки с Экспортом -->
     <div class="card" style="border-left: 5px solid #1976d2;">
-        <h3 id="i18n-notes-title" style="margin: 0 0 5px 0; color: #1976d2; font-size: 18px;">📓 Заметки & Идеи</h3>
-        <p id="i18n-notes-sub" style="font-size: 13px; color: var(--subtext-color); margin-bottom: 10px;">Быстрый блок для записей (сохраняется автоматически).</p>
-        <textarea id="notesInput" oninput="saveNotes()" style="width: 100%; height: 70px; border-radius: 8px; border: 1px solid #ccc; padding: 8px; font-size: 13px; box-sizing: border-box; background: transparent; color: var(--text-color);" placeholder="Написать идею..."></textarea>
+        <h3 style="margin: 0 0 5px 0; color: #1976d2; font-size: 18px;" data-i18n="notesTitle">📓 Заметки & Идеи</h3>
+        <p style="font-size: 13px; color: var(--subtext-color); margin-bottom: 10px;" data-i18n="notesSub">Автосохранение в память устройства.</p>
+        <textarea id="notesInput" oninput="saveNotes()" style="width: 100%; height: 80px; border-radius: 8px; padding: 8px; font-size: 13px; box-sizing: border-box;" placeholder="Написать идею..."></textarea>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button onclick="exportNotes()" style="background: rgba(25,118,210,0.1); color: #1976d2; border: 1px solid #1976d2; padding: 6px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600;" data-i18n="exportBtn">📥 Скачать файл</button>
+        </div>
     </div>
 
-    <!-- Блок: Быстрые ссылки -->
+    <!-- Быстрые ссылки -->
     <div class="card" style="border-left: 5px solid #f57c00;">
-        <h3 id="i18n-links-title" style="margin: 0 0 10px 0; color: #f57c00; font-size: 18px;">🚀 Быстрые ссылки</h3>
+        <h3 style="margin: 0 0 10px 0; color: #f57c00; font-size: 18px;" data-i18n="linksTitle">🚀 Быстрые ссылки</h3>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <a href="https://todoist.com" target="_blank" style="background: rgba(220,38,38,0.1); padding: 8px 12px; border-radius: 6px; font-size: 12px; color: #dc2626; text-decoration: none; font-weight: 600;">Todoist ↗</a>
-            <a href="https://github.com" target="_blank" style="background: rgba(0,0,0,0.05); padding: 8px 12px; border-radius: 6px; font-size: 12px; color: var(--text-color); text-decoration: none;">GitHub</a>
-            <a href="https://vercel.com" target="_blank" style="background: rgba(0,0,0,0.05); padding: 8px 12px; border-radius: 6px; font-size: 12px; color: var(--text-color); text-decoration: none;">Vercel</a>
             <a href="https://youtube.com" target="_blank" style="background: rgba(0,0,0,0.05); padding: 8px 12px; border-radius: 6px; font-size: 12px; color: var(--text-color); text-decoration: none;">YouTube</a>
         </div>
     </div>
@@ -226,146 +187,106 @@
 </div>
 
 <script>
-    let currentLang = 'ru';
-
-    // Загрузка сохраненных заметок при открытии страницы
-    window.addEventListener('DOMContentLoaded', () => {
-        const savedNotes = localStorage.getItem('yusup_hub_notes');
-        if (savedNotes) {
-            document.getElementById('notesInput').value = savedNotes;
-        }
-    });
-
-    // Функция автосохранения заметок
-    function saveNotes() {
-        const text = document.getElementById('notesInput').value;
-        localStorage.setItem('yusup_hub_notes', text);
-    }
-
-    // Переключение темной/светлой темы
-    function toggleTheme() {
-        const body = document.getElementById('pageBody');
-        body.classList.toggle('dark-theme');
-        const btn = document.getElementById('themeBtn');
-        btn.innerText = body.classList.contains('dark-theme') ? '☀️' : '🌙';
-    }
-
-    // Тексты для переводов интерфейса
     const translations = {
         ru: {
             welcome: "Привет, Юсуп! 👋",
-            subtitle: "Продуктивность и инструменты.",
-            mayaTitle: "👩‍💻 Майя (Собеседник)",
-            mayaPh: "Написать Майе...",
-            focusGameTitle: "⏱️ Сессия Фокуса (Deep Work)",
-            focusGameSub: "Нажми, чтобы начать отсчет времени концентрации.",
-            focusBtnStart: "Начать сессию",
-            focusBtnStop: "Завершить сессию",
-            quranTitle: "📖 Священный Коран & Тафсир",
-            aiBtn: "🤖 AI Комментарий",
-            nextBtn: "Следующий 🔄",
-            quranLink: "Читать весь Коран онлайн (полная библиотека) ↗",
-            humorTitle: "😂 IT & Жизненный Юмор",
-            humorSub: "Шутки для поднятия настроения.",
-            humorText: "— Почему программисты не любят природу? — Там слишком много багов и нет кнопки Undo.",
-            advisorTitle: "🤖 AI Советник",
-            advisorSub: "Новые силы и умные советы на каждый день.",
-            advisorBtn: "Получить совет",
-            botsTitle: "⚡ Мои Проекты & Боты",
-            botsSub: "Быстрый доступ к деплоям и панели управления.",
+            subtitle: "Центр управления и продуктивность.",
+            shiftTitle: "📌 Главная задача / Смена",
+            shiftSub: "Фокус на текущий рабочий момент.",
+            focusTitle: "⏱️ Сессия Фокуса (Pomodoro)",
+            focusSub: "Концентрация 25 минут без потери времени.",
+            quranTitle: "📖 Священный Коран",
+            refBtn: "💭 Размышление",
+            nextBtn: "Далее 🔄",
+            projectsTitle: "⚡ Мои Проекты & Боты",
+            projectsSub: "Быстрый доступ к разработкам.",
             notesTitle: "📓 Заметки & Идеи",
-            notesSub: "Быстрый блок для записей (сохраняется автоматически).",
-            notesPh: "Написать идею...",
+            notesSub: "Автосохранение в память устройства.",
+            exportBtn: "📥 Скачать файл",
             linksTitle: "🚀 Быстрые ссылки"
         },
         tk: {
             welcome: "Salam, Yusup! 👋",
-            subtitle: "Öndürijilik we gurallar.",
-            mayaTitle: "👩‍💻 Maýa (Söhbetdeş)",
-            mayaPh: "Maýa ýazmak...",
-            focusGameTitle: "⏱️ Üns Sessiasy (Deep Work)",
-            focusGameSub: "Ünsi jemlemek wagtyny başlamak üçin basyň.",
-            focusBtnStart: "Sessiasy başlamak",
-            focusBtnStop: "Sessiasy tamamlamak",
-            quranTitle: "📖 Keramatly Kurhan & Tafsir",
-            aiBtn: "🤖 AI Teswir",
+            subtitle: "Dolandyryş merkezi we öndürijilik.",
+            shiftTitle: "📌 Esasy iş / Çюz",
+            shiftSub: "Häzirki wagtda esasy üns.",
+            focusTitle: "⏱️ Üns Sessiasy (Pomodoro)",
+            focusSub: "Wagt ýitirmän 25 минут ünsi jemlemek.",
+            quranTitle: "📖 Keramatly Kurhan",
+            refBtn: "💭 Pikirlenme",
             nextBtn: "Indiki 🔄",
-            quranLink: "Kurhany online okaň (doly kitaphana) ↗",
-            humorTitle: "😂 IT & Durmuş Degişmeleri",
-            humorSub: "Keýpiňizi götermek üçin degişmeler.",
-            humorText: "— Näme üçin programmistler tebigaty söýmeýärler? — Ol ýerde buglar gaty köp we Undo düwmä ýok.",
-            advisorTitle: "🤖 AI Maslahatçy",
-            advisorSub: "Täze güýçler we gündelik akylly maslahatlar.",
-            advisorBtn: "Maslahat alyň",
-            botsTitle: "⚡ Meniň Taslamalarym & Botlarym",
-            botsSub: "Ýerleşdirmelere we dolandyryş paneline çalt giriş.",
+            projectsTitle: "⚡ Meniň Taslamalarym & Botlarym",
+            projectsSub: "Işläp düzmelere çalt giriş.",
             notesTitle: "📓 Bellikler & Ideýalar",
-            notesSub: "Bellikler üçin çalt blok (awtomatiki ýazdyrylýar).",
-            notesPh: "Ideýa ýazyň...",
+            notesSub: "Enjamyň ýadyna awtomatiki ýazdyrylýar.",
+            exportBtn: "📥 Faýly ýükläp al",
             linksTitle: "🚀 Çalt baglanyşyklar"
         }
     };
 
-    // База аятов
     const quranData = [
         {
             arabic: "وَمَن يَتَّوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ",
             ru: "«А кто уповает на Аллаха, для того Он достаточен» (Сура «Развод», аят 3).",
-            tk: "«Kim Allahe wekil etse, Ol oňa ýeterlikdir» (Talaq сүresi, 3-nji aýat).",
-            commentRu: "🤖 ИИ комментирует: Глубокий принцип для обретения внутреннего спокойствия. Истинное упование сочетает в себе активные действия и надежду на Всевышнего.",
-            commentTk: "🤖 AI teswirleýär: Içki rahatlygy tapmak üçin çuňňur ýörelge. Hakyky wekil etmek işjeň hereketleri we Allada umyt etmegi birleşdirýär."
+            tk: "«Kim Allahe wekil etse, Ol oňa ýeterlikdir» (Talaq süresi, 3-nji aýat).",
+            refRu: "💭 Размышление: Истинное упование сочетает в себе активные действия и надежду на Всевышнего.",
+            refTk: "💭 Pikirlenme: Hakyky wekil etmek işjeň hereketleri we Allada umyt etmegi birleşdirýär."
         },
         {
             arabic: "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
-            ru: "«Воистину, за каждым прощением приходит облегчение» (Сура «Раскрытие», аят 6).",
-            tk: "«Hakykatdan hem, her bir kynçylyk bilen birlikde ýeňillik bardyr» (Şarh сүresi, 6-njy aýat).",
-            commentRu: "🤖 ИИ комментирует: Напоминание о том, что любые трудности временны. За испытаниями всегда следует выход и облегчение.",
-            commentTk: "🤖 AI teswirleýär: Islendik kynçylygiň wagtlaýyndygyny ýatlatma. Synaglardan soň hemişe ýeňillik gelýär."
-        },
-        {
-            arabic: "فَاذْكُرُونِي أَذْكُرْكُمْ",
-            ru: "«Поминайте Меня, и Я буду помнить о вас» (Сура «Корова», аят 152).",
-            tk: "«Meni ýatlaň, Menem sizi ýatlaryn» (Bakara сүresi, 152-nji aýat).",
-            commentRu: "🤖 ИИ комментирует: Духовная связь с Создателем дает силы, ясность ума и защиту от суеты в течение всего рабочего дня.",
-            commentTk: "🤖 AI teswirleýär: Ýaradıcı bilen ruhy baglanyşyk bütin iş günüň dowamynda güýç, akyl açyklygyny berýär."
+            ru: "«Воистину, за каждым затруднением приходит облегчение» (Сура «Раскрытие», аят 6).",
+            tk: "«Hakykatdan hem, her bir kynçylyk bilen birlikde ýeňillik bardyr» (Şarh süresi, 6-njy aýat).",
+            refRu: "💭 Размышление: Напоминание о том, что любые трудности временны. За испытаниями всегда следует выход.",
+            refTk: "💭 Pikirlenme: Islendik kynçylygiň wagtlaýyndygyny ýatlatma. Synaglardan soň hemişe ýeňillik gelýär."
         }
     ];
 
     let currentAyatIndex = 0;
+    let currentLang = localStorage.getItem('yusup_lang') || 'ru';
 
-    // Главная функция переключения языка всего приложения
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('yusup_theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.getElementById('pageBody').classList.add('dark-theme');
+            document.getElementById('themeBtn').innerText = '☀️';
+        }
+        
+        const savedNotes = localStorage.getItem('yusup_hub_notes');
+        if (savedNotes) {
+            document.getElementById('notesInput').value = savedNotes;
+        }
+
+        const savedShift = localStorage.getItem('yusup_hub_shift');
+        if (savedShift) {
+            document.getElementById('shiftInput').value = savedShift;
+        }
+
+        setGlobalLang(currentLang);
+    });
+
+    function toggleTheme() {
+        const body = document.getElementById('pageBody');
+        body.classList.toggle('dark-theme');
+        const isDark = body.classList.contains('dark-theme');
+        document.getElementById('themeBtn').innerText = isDark ? '☀️' : '🌙';
+        localStorage.setItem('yusup_theme', isDark ? 'dark' : 'light');
+    }
+
     function setGlobalLang(lang) {
         currentLang = lang;
-        const t = translations[lang];
+        localStorage.setItem('yusup_lang', lang);
 
-        document.getElementById('btnRu').style.background = (lang === 'ru') ? '#2e7d32' : '#eee';
-        document.getElementById('btnRu').style.color = (lang === 'ru') ? '#fff' : '#333';
-        document.getElementById('btnTk').style.background = (lang === 'tk') ? '#2e7d32' : '#eee';
-        document.getElementById('btnTk').style.color = (lang === 'tk') ? '#fff' : '#333';
+        document.getElementById('btnRu').style.background = (lang === 'ru') ? '#2e7d32' : 'var(--border-color)';
+        document.getElementById('btnRu').style.color = (lang === 'ru') ? '#fff' : 'var(--text-color)';
+        document.getElementById('btnTk').style.background = (lang === 'tk') ? '#2e7d32' : 'var(--border-color)';
+        document.getElementById('btnTk').style.color = (lang === 'tk') ? '#fff' : 'var(--text-color)';
 
-        document.getElementById('i18n-welcome').innerText = t.welcome;
-        document.getElementById('i18n-subtitle').innerText = t.subtitle;
-        document.getElementById('i18n-maya-title').innerText = t.mayaTitle;
-        document.getElementById('mayaInput').placeholder = t.mayaPh;
-        document.getElementById('i18n-focus-game-title').innerText = t.focusGameTitle;
-        document.getElementById('i18n-focus-game-sub').innerText = t.focusGameSub;
-        document.getElementById('i18n-focus-btn').innerText = isFocusActive ? t.focusBtnStop : t.focusBtnStart;
-        document.getElementById('i18n-quran-title').innerText = t.quranTitle;
-        document.getElementById('i18n-ai-btn').innerText = t.aiBtn;
-        document.getElementById('i18n-next-btn').innerText = t.nextBtn;
-        document.getElementById('i18n-quran-link').innerText = t.quranLink;
-        document.getElementById('i18n-humor-title').innerText = t.humorTitle;
-        document.getElementById('i18n-humor-sub').innerText = t.humorSub;
-        document.getElementById('i18n-humor-text').innerText = t.humorText;
-        document.getElementById('i18n-advisor-title').innerText = t.advisorTitle;
-        document.getElementById('i18n-advisor-sub').innerText = t.advisorSub;
-        document.getElementById('i18n-advisor-btn').innerText = t.advisorBtn;
-        document.getElementById('i18n-bots-title').innerText = t.botsTitle;
-        document.getElementById('i18n-bots-sub').innerText = t.botsSub;
-        document.getElementById('i18n-notes-title').innerText = t.notesTitle;
-        document.getElementById('i18n-notes-sub').innerText = t.notesSub;
-        document.getElementById('notesInput').placeholder = t.notesPh;
-        document.getElementById('i18n-links-title').innerText = t.linksTitle;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang][key]) {
+                el.innerText = translations[lang][key];
+            }
+        });
 
         updateAyatDisplay();
     }
@@ -374,117 +295,78 @@
         const item = quranData[currentAyatIndex];
         document.getElementById('quranArabic').innerText = item.arabic;
         document.getElementById('quranText').innerText = (currentLang === 'ru') ? item.ru : item.tk;
-        document.getElementById('aiCommentText').innerHTML = (currentLang === 'ru') ? item.commentRu : item.commentTk;
+        document.getElementById('reflectionText').innerHTML = (currentLang === 'ru') ? item.refRu : item.refTk;
     }
 
     function nextAyat() {
         currentAyatIndex = (currentAyatIndex + 1) % quranData.length;
-        document.getElementById('aiCommentBox').style.display = 'none';
+        document.getElementById('reflectionBox').style.display = 'none';
         updateAyatDisplay();
     }
 
-    function toggleAiComment() {
-        const box = document.getElementById('aiCommentBox');
+    function toggleReflection() {
+        const box = document.getElementById('reflectionBox');
         box.style.display = (box.style.display === 'none') ? 'block' : 'none';
     }
 
-    // Логика Майи (Собеседник)
-    function talkToMaya() {
-        const input = document.getElementById('mayaInput').value.trim();
-        const reply = document.getElementById('mayaReply');
-        if (!input) return;
-        if (currentLang === 'tk') {
-            reply.innerText = "Maýa: Düşnükli, Yusup! Bellik edildi: " + input;
-        } else {
-            reply.innerText = "Майя: Понятно, Юсуп! Принято в работу: " + input;
-        }
-        document.getElementById('mayaInput').value = '';
+    function saveNotes() {
+        const text = document.getElementById('notesInput').value;
+        localStorage.setItem('yusup_hub_notes', text);
     }
 
-    // Автоответчик / Авто-режим Майи
-    let autoResponderInterval = null;
-    let isAutoActive = false;
-
-    function toggleAutoResponder() {
-        isAutoActive = !isAutoActive;
-        const btn = document.getElementById('autoBtn');
-        const reply = document.getElementById('mayaReply');
-
-        if (isAutoActive) {
-            btn.style.background = '#d81b60';
-            btn.style.color = 'white';
-            btn.innerText = currentLang === 'tk' ? '🤖 Awto: ÝANIK' : '🤖 Авто: ВКЛ';
-            
-            const messagesRu = [
-                "Майя: Боты на Railway работают стабильно! ⚡",
-                "Майя: Юсуп, не забудь проверить задачи на сегодня в Todoist.",
-                "Майя: Отличный фокус! Продолжай в том же духе. 💪",
-                "Майя: Все системы в норме, жду твоих команд!"
-            ];
-            const messagesTk = [
-                "Maýa: Railway-daky botlar durnukly işleýär! ⚡",
-                "Maýa: Yusup, Todoist-daky tabşyryklary ýatdan çykarma.",
-                "Maýa: Gowy üns! Şeýle dowam et. 💪",
-                "Maýa: Hemme zat tertipde, buýruklaryňa garaşýaryn!"
-            ];
-
-            autoResponderInterval = setInterval(() => {
-                const arr = currentLang === 'tk' ? messagesTk : messagesRu;
-                const randomMsg = arr[Math.floor(Math.random() * arr.length)];
-                reply.innerText = randomMsg;
-            }, 6000);
-
-        } else {
-            btn.style.background = 'rgba(216,27,96,0.1)';
-            btn.style.color = '#d81b60';
-            btn.innerText = currentLang === 'tk' ? '🤖 Awto: ÖÇÜK' : '🤖 Авто: ВЫКЛ';
-            clearInterval(autoResponderInterval);
-            reply.innerText = currentLang === 'tk' ? 'Maýa: Awto-režim ýapyldy.' : 'Майя: Автоответчик выключен.';
-        }
+    function saveShift() {
+        const text = document.getElementById('shiftInput').value;
+        localStorage.setItem('yusup_hub_shift', text);
     }
 
-    // Тренажер фокуса (Таймер)
-    let focusSeconds = 0;
+    function exportNotes() {
+        const text = document.getElementById('notesInput').value;
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'yusup-notes.txt';
+        a.click();
+    }
+
     let focusInterval = null;
+    let targetTime = 0;
     let isFocusActive = false;
+    const FOCUS_DURATION = 25 * 60;
 
     function toggleFocusTimer() {
-        isFocusActive = !isFocusActive;
-        const btn = document.getElementById('i18n-focus-btn');
-        const t = translations[currentLang];
+        const btn = document.getElementById('focusBtn');
+        const timerEl = document.getElementById('focusTimer');
 
-        if (isFocusActive) {
-            btn.innerText = t.focusBtnStop;
+        if (!isFocusActive) {
+            isFocusActive = true;
+            targetTime = Date.now() + FOCUS_DURATION * 1000;
+            btn.innerText = (currentLang === 'tk') ? 'Sessiasy bes etmek' : 'Завершить сессию';
             btn.style.background = '#c2185b';
+
             focusInterval = setInterval(() => {
-                focusSeconds++;
-                let mins = Math.floor(focusSeconds / 60);
-                let secs = focusSeconds % 60;
-                document.getElementById('focusTimer').innerText = 
-                    (mins < 10 ? "0" + mins : mins) + ":" + (secs < 10 ? "0" + secs : secs);
+                const remaining = Math.max(0, Math.round((targetTime - Date.now()) / 1000));
+                const mins = Math.floor(remaining / 60);
+                const secs = remaining % 60;
+                timerEl.innerText = (mins < 10 ? "0" + mins : mins) + ":" + (secs < 10 ? "0" + secs : secs);
+
+                if (remaining <= 0) {
+                    clearInterval(focusInterval);
+                    alert(currentLang === 'tk' ? 'Wagt gutardy! Dynç alyň.' : 'Время сессии вышло! Сделайте перерыв.');
+                    resetFocusTimer();
+                }
             }, 1000);
         } else {
-            btn.innerText = t.focusBtnStart;
-            btn.style.background = '#00796b';
-            clearInterval(focusInterval);
-            focusSeconds = 0;
-            document.getElementById('focusTimer').innerText = "00:00";
+            resetFocusTimer();
         }
     }
 
-    function getAiAdvice() {
-        const advicesRu = [
-            "AI Советник: Разбей большую задачу на 3 маленьких шага.",
-            "AI Советник: Сделай 5 минут перерыва для отдыха глаз.",
-            "AI Советник: Отключи уведомления на полчаса для глубокой работы."
-        ];
-        const advicesTk = [
-            "AI Maslahatçy: Ululy taslamany 3 sany kiçi ädime böl.",
-            "AI Maslahatçy: Gözleriňiz dynç almak üçin 5 minut arakesme ediň.",
-            "AI Maslahatçy: Çuňňur işlemek üçin bildirişleri öçüriň."
-        ];
-        const arr = currentLang === 'tk' ? advicesTk : advicesRu;
-        alert(arr[Math.floor(Math.random() * arr.length)]);
+    function resetFocusTimer() {
+        clearInterval(focusInterval);
+        isFocusActive = false;
+        document.getElementById('focusTimer').innerText = "25:00";
+        const btn = document.getElementById('focusBtn');
+        btn.innerText = (currentLang === 'tk') ? 'Sessiasy başlamak' : 'Начать сессию';
+        btn.style.background = '#00796b';
     }
 </script>
 
